@@ -2,13 +2,13 @@ if(CONFIG_MBEDTLS)
 zephyr_interface_library_named(mbedTLS)
 
 if(CONFIG_MBEDTLS_BUILTIN)
-  target_compile_definitions(mbedTLS INTERFACE
-	  MBEDTLS_CONFIG_FILE="${CONFIG_MBEDTLS_CFG_FILE}"
+  target_compile_definitions(${IMAGE}mbedTLS INTERFACE
+	MBEDTLS_CONFIG_FILE="${CONFIG_MBEDTLS_CFG_FILE}"
 	)
 
-  target_include_directories(mbedTLS INTERFACE
-	  include
-	  configs
+  target_include_directories(${IMAGE}mbedTLS INTERFACE
+	include
+	configs
 	)
 
   zephyr_library()
@@ -31,14 +31,14 @@ if(CONFIG_ARCH_POSIX AND CONFIG_ASAN AND NOT CONFIG_64BIT)
       "${OPTIMIZE_FOR_SPEED_FLAG}")
 endif ()
 
-  zephyr_library_link_libraries(mbedTLS)
+  zephyr_library_link_libraries(${IMAGE}mbedTLS)
 else()
   assert(CONFIG_MBEDTLS_LIBRARY "MBEDTLS was enabled, but neither BUILTIN or LIBRARY was selected.")
 
   # NB: CONFIG_MBEDTLS_LIBRARY is not regression tested and is
   # therefore susceptible to bit rot
 
-  target_include_directories(mbedTLS INTERFACE
+  target_include_directories(${IMAGE}mbedTLS INTERFACE
 	${CONFIG_MBEDTLS_INSTALL_PATH}
 	)
 
@@ -52,4 +52,5 @@ else()
   # after mbedtls_external on the linkers command line.
 endif()
 
+target_link_libraries(${IMAGE}mbedTLS INTERFACE ${IMAGE}zephyr_interface)
 endif()
