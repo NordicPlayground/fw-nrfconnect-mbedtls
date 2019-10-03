@@ -106,7 +106,7 @@ else()
 	)
 
   zephyr_link_libraries(
-    mbedtls_external
+    ${IMAGE}mbedtls_external
     -L${CONFIG_MBEDTLS_INSTALL_PATH}
     gcc
     )
